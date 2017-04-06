@@ -38,6 +38,7 @@ Judge.prototype.init = function(success)
   var q_no = this.question_no;
   var input = questions[q_no].input;
   var output = questions[q_no].output;
+  var timeout = questions[q_no].timeout;
 
   // Init compiler
   var lang = this.language;
@@ -48,7 +49,7 @@ Judge.prototype.init = function(success)
   var path = this.path;
   fs.mkdirSync(folder);
 
-  fs.copySync('payload/exec.sh', folder+'/exec.sh')
+  fs.copySync('payload/judge.sh', folder+'/judge.sh')
 
   fs.writeFileSync(folder+'/'+compiler.filename, this.code);
 
@@ -56,10 +57,10 @@ Judge.prototype.init = function(success)
   fs.writeFileSync(folder+'/output', output);
 
   fs.chmodSync(folder, 0755);
-  fs.chmodSync(folder+'/exec.sh', 0755);
+  fs.chmodSync(folder+'/judge.sh', 0755);
 
   // Build docker command
-  var docker_cmd = "docker run -v "+path+folder+":/usr/code -w /usr/code "+compiler.container+" ./exec.sh "+compiler.compiler+" "+compiler.filename+" "+compiler.exec_cmd
+  var docker_cmd = "docker run -v "+path+folder+":/usr/code -w /usr/code "+compiler.container+" ./judge.sh "+compiler.compiler+" "+compiler.filename+" "+compiler.exec_cmd+" "+timeout
   console.log(docker_cmd);
 
   // Save to member variable
