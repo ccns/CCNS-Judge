@@ -3,7 +3,7 @@ var app = express();
 var bodyParser = require('body-parser');
 var port = process.env.PORT || 3000;
 
-var Judge = require('./Judge.js');
+var Judge = require('./judge/Judge');
 
 app.use(express.static(__dirname));
 app.use(bodyParser.raw());
@@ -33,7 +33,7 @@ app.post('/judge', function(req, res)
   var team_id = req.body.team_id;
   var contest_id = req.body.contest_id;
 
-  var folder= 'temp/' + random(10);
+  var folder= 'judge/temp/' + random(10);
   var path=__dirname+"/";
 
   var judge = new Judge(path, folder, language, question_no, code);
